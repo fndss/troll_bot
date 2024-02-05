@@ -7,12 +7,13 @@ api_id = "1"
 api_hash = "b6b154c3707471f5339bd661645ed3d6"
 bot_token = ""
 
-# Список ID пользователей, на сообщения которых бот должен реагировать
+# open "data_base" file
 with open("result.json", "r", encoding="utf-8") as f:
     buff = json.load(f)
 
 app = Client("my_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 
+# add user id in triggers_id list
 @app.on_message(filters.user(buff["bogi_imperatori"]) & filters.command("setdaun"))
 async def add_daun(client, message):
     global buff
@@ -33,6 +34,7 @@ async def add_daun(client, message):
             json.dump(buff, f1, indent=4, ensure_ascii=False)
         await message.reply_text("🫵, @" + (str)(message.reply_to_message.from_user.username) + " ТЫ ДАУН!", quote=True)
 
+# delete user id out on triggers_id list
 @app.on_message(filters.user(buff["bogi_imperatori"]) & filters.command("deldaun"))
 async def del_daun(client, message):
     global buff
@@ -51,6 +53,7 @@ async def del_daun(client, message):
         await message.reply_text("🫵, @" + (str)(message.reply_to_message.from_user.username) + " ТЫ ВЫПИСАН ИЗ ДАУНОВ!", quote=True)
 
 
+#reply random message out on text_troll list
 @app.on_message(filters.incoming)
 async def reply_to_user(client, message):
     try:
