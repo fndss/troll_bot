@@ -20,9 +20,20 @@ async def add_daun(client, message):
     if not message.reply_to_message:
         await message.reply_text("комманда должна отвечать на сообщение")
         return
-    if message.reply_to_message.from_user.id in buff["bogi_imperatori"]:
-        await message.reply_text("это бог император", quote=True)
-        return
+    try:
+        if message.reply_to_message.from_user.id in buff["bogi_imperatori"]:
+            await message.reply_text("это бог император", quote=True)
+            return
+    except:
+        print("roflan ebala")
+    # if message.reply_to_message.from_user.id or message.reply_to_message.sender_chat.id in buff['dauns']:
+    if not message.reply_to_message.sender_chat:
+        if message.reply_to_message.from_user.id in buff['dauns']:
+            await message.reply_text(f"пользователь @{message.reply_to_message.from_user.username} уже есть в списке даунов",  quote=True)
+            return
+    elif message.reply_to_message.sender_chat.id in buff['dauns']:
+            await message.reply_text(f"пользователь @{message.reply_to_message.sender_chat.username} уже есть в списке даунов",  quote=True)
+            return
     try:
         buff['dauns'].append(message.reply_to_message.sender_chat.id)
         with open("result.json", "w", encoding="utf-8") as f1:
@@ -41,6 +52,13 @@ async def del_daun(client, message):
     if not message.reply_to_message:
         await message.reply_text("комманда должна отвечать на сообщение")
         return
+    if not message.reply_to_message.sender_chat:
+        if message.reply_to_message.from_user.id not in buff['dauns']:
+            await message.reply_text(f"пользователя @{message.reply_to_message.from_user.username} нету в списке даунов",  quote=True)
+            return
+    elif message.reply_to_message.sender_chat.id not in buff['dauns']:
+            await message.reply_text(f"пользователя @{message.reply_to_message.sender_chat.username} нету в списке даунов",  quote=True)
+            return
     try:
         buff['dauns'].remove(message.reply_to_message.sender_chat.id)
         with open("result.json", "w", encoding="utf-8") as f1:
